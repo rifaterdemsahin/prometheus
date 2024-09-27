@@ -9,19 +9,19 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 1Gi  # Reduced storage size for CRC
+  size: 1Gi  # Adjusted to a smaller size for CRC
   storageClass: ""
   annotations: {}
 
 securityContext:
   enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
+  fsGroup: 1001  # Ensures the container can write to mounted volumes
+  runAsUser: 1001  # Ensures the container runs as user 1001
 
 initContainers:
   - name: fix-permissions
     image: busybox
-    command: ['sh', '-c', 'chown -R 1001:1001 /opt/bitnami/grafana/data']
+    command: ['sh', '-c', 'chown -R 1001:1001 /opt/bitnami/grafana/data && chmod -R 775 /opt/bitnami/grafana/data']
     volumeMounts:
       - name: grafana-storage
         mountPath: /opt/bitnami/grafana/data
