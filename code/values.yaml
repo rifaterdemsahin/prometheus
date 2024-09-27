@@ -9,9 +9,15 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 1Gi  # Adjusted to a smaller size for CRC
+  size: 1Gi
   storageClass: ""
   annotations: {}
+  # Add fsGroup to the persistent volume if supported by the storage class
+  mountOptions:
+    - dir_mode=0775
+    - file_mode=0664
+    - uid=1001
+    - gid=1001
 
 securityContext:
   enabled: true
@@ -28,11 +34,11 @@ initContainers:
 
 resources:
   limits:
-    cpu: 500m  # Reduced CPU limit for CRC
-    memory: 512Mi  # Reduced memory limit for CRC
+    cpu: 500m
+    memory: 512Mi
   requests:
-    cpu: 50m  # Reduced CPU request for CRC
-    memory: 128Mi  # Reduced memory request for CRC
+    cpu: 50m
+    memory: 128Mi
 
 service:
   type: ClusterIP
