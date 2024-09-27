@@ -1,0 +1,83 @@
+replicaCount: 1
+
+image:
+  repository: bitnami/grafana
+  tag: latest
+  pullPolicy: IfNotPresent
+
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi
+  storageClass: ""
+  # Use existing claim
+  # existingClaim: ""
+  annotations: {}
+
+securityContext:
+  enabled: true
+  fsGroup: 1001  # Ensures the container can write to mounted volumes
+  runAsUser: 1001 # Ensures the container runs as user 1001
+
+# Uncomment the following line if you need to run Grafana in privileged mode for debugging (not recommended for production):
+# privileged: true
+
+initContainers:
+  - name: fix-permissions
+    image: busybox
+    command: ['sh', '-c', 'chown -R 1001:1001 /opt/bitnami/grafana/data']
+    volumeMounts:
+      - name: grafana-storage
+        mountPath: /opt/bitnami/grafana/data
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+service:
+  type: ClusterIP
+  port: 80
+  annotations: {}
+
+ingress:
+  enabled: false
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 120
+  timeoutSeconds: 30
+  failureThreshold: 6
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 6
+
+grafana:
+  admin:
+    existingSecret: ""
+  dashboardsConfigMaps: {}
+  dashboards:
+    enabled: true
+  plugins: ""
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true
+
+# For persistence to work, the volumes must be properly configured
+volumeMounts:
+  - name: grafana-storage
+    mountPath: /opt/bitnami/grafana/data
+
+volumes:
+  - name: grafana-storage
+    persistentVolumeClaim:
+      claimName: grafana-pvc
