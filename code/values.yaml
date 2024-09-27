@@ -9,19 +9,14 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 10Gi
+  size: 1Gi  # Reduced storage size for CRC
   storageClass: ""
-  # Use existing claim
-  # existingClaim: ""
   annotations: {}
 
 securityContext:
   enabled: true
-  fsGroup: 1001  # Ensures the container can write to mounted volumes
-  runAsUser: 1001 # Ensures the container runs as user 1001
-
-# Uncomment the following line if you need to run Grafana in privileged mode for debugging (not recommended for production):
-# privileged: true
+  fsGroup: 1001
+  runAsUser: 1001
 
 initContainers:
   - name: fix-permissions
@@ -33,11 +28,11 @@ initContainers:
 
 resources:
   limits:
-    cpu: 1000m
-    memory: 1024Mi
+    cpu: 500m  # Reduced CPU limit for CRC
+    memory: 512Mi  # Reduced memory limit for CRC
   requests:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 50m  # Reduced CPU request for CRC
+    memory: 128Mi  # Reduced memory request for CRC
 
 service:
   type: ClusterIP
@@ -72,7 +67,6 @@ grafana:
     datasources:
       enabled: true
 
-# For persistence to work, the volumes must be properly configured
 volumeMounts:
   - name: grafana-storage
     mountPath: /opt/bitnami/grafana/data
