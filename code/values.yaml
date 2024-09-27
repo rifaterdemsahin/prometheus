@@ -9,8 +9,8 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 1Gi  # Adjusted to a smaller size for CRC
-  storageClass: ""  # Use default storage class or provide a specific one suitable for CRC
+  size: 2Gi  # Specify the size you need
+  storageClass: "custom-hostpath-storage"  # Use the newly created storage class
   annotations: {}
 
 securityContext:
