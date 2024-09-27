@@ -14,9 +14,19 @@ persistence:
   annotations: {}
 
 securityContext:
-  enabled: true
   fsGroup: 1001  # Ensures the container can write to mounted volumes
-  runAsUser: 1001  # Ensures the container runs as user 1001
+
+containers:
+  - name: grafana
+    securityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001  # Ensures that the container runs with the correct permissions
+    volumeMounts:
+      - name: grafana-storage
+        mountPath: /opt/bitnami/grafana/data
+      - name: plugins
+        mountPath: /opt/bitnami/grafana/data/plugins
 
 initContainers:
   - name: fix-permissions
@@ -28,11 +38,11 @@ initContainers:
 
 resources:
   limits:
-    cpu: 500m  # Reduced CPU limit for CRC
-    memory: 512Mi  # Reduced memory limit for CRC
+    cpu: 500m
+    memory: 512Mi
   requests:
-    cpu: 50m  # Reduced CPU request for CRC
-    memory: 128Mi  # Reduced memory request for CRC
+    cpu: 50m
+    memory: 128Mi
 
 service:
   type: ClusterIP
@@ -66,12 +76,6 @@ grafana:
       enabled: true
     datasources:
       enabled: true
-
-volumeMounts:
-  - name: grafana-storage
-    mountPath: /opt/bitnami/grafana/data
-  - name: plugins
-    mountPath: /opt/bitnami/grafana/data/plugins
 
 volumes:
   - name: grafana-storage
