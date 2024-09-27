@@ -1,0 +1,11 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: custom-hostpath-storage
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"  # Not a default class
+provisioner: kubevirt.io.hostpath-provisioner
+reclaimPolicy: Delete  # Automatically deletes the volume when the PVC is deleted
+volumeBindingMode: Immediate  # Provision the volume as soon as the PVC is created
+parameters:
+  storagePool: local
