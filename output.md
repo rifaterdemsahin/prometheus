@@ -1,3 +1,6 @@
+# Install
+![image](https://github.com/user-attachments/assets/db91bfa4-2f6a-4306-a909-dbbb0b56a617)
+
 # Pods are not staring
 <img width="1726" alt="image" src="https://github.com/user-attachments/assets/58333083-e0c3-49cc-995b-af180f4b5f3a">
 
