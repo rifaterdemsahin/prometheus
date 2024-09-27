@@ -9,15 +9,9 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 1Gi
+  size: 1Gi  # Adjusted to a smaller size for CRC
   storageClass: ""
   annotations: {}
-  # Add fsGroup to the persistent volume if supported by the storage class
-  mountOptions:
-    - dir_mode=0775
-    - file_mode=0664
-    - uid=1001
-    - gid=1001
 
 securityContext:
   enabled: true
@@ -27,18 +21,18 @@ securityContext:
 initContainers:
   - name: fix-permissions
     image: busybox
-    command: ['sh', '-c', 'mkdir -p /opt/bitnami/grafana/data/plugins && chown -R 1001:1001 /opt/bitnami/grafana/data/plugins && chmod -R 775 /opt/bitnami/grafana/data/plugins']
+    command: ['sh', '-c', 'chown -R 1001:1001 /opt/bitnami/grafana/data && chmod -R 775 /opt/bitnami/grafana/data']
     volumeMounts:
       - name: grafana-storage
         mountPath: /opt/bitnami/grafana/data
 
 resources:
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 500m  # Reduced CPU limit for CRC
+    memory: 512Mi  # Reduced memory limit for CRC
   requests:
-    cpu: 50m
-    memory: 128Mi
+    cpu: 50m  # Reduced CPU request for CRC
+    memory: 128Mi  # Reduced memory request for CRC
 
 service:
   type: ClusterIP
@@ -76,8 +70,12 @@ grafana:
 volumeMounts:
   - name: grafana-storage
     mountPath: /opt/bitnami/grafana/data
+  - name: plugins
+    mountPath: /opt/bitnami/grafana/data/plugins
 
 volumes:
   - name: grafana-storage
     persistentVolumeClaim:
       claimName: grafana-pvc
+  - name: plugins
+    emptyDir: {}
