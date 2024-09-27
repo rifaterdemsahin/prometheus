@@ -10,7 +10,7 @@ persistence:
   accessModes:
     - ReadWriteOnce
   size: 1Gi  # Adjusted to a smaller size for CRC
-  storageClass: ""
+  storageClass: ""  # Use default storage class or provide a specific one suitable for CRC
   annotations: {}
 
 securityContext:
@@ -38,11 +38,11 @@ initContainers:
 
 resources:
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 200m  # Reduced for CRC
+    memory: 256Mi  # Reduced for CRC
   requests:
-    cpu: 50m
-    memory: 128Mi
+    cpu: 100m  # Reduced for CRC
+    memory: 128Mi  # Reduced for CRC
 
 service:
   type: ClusterIP
