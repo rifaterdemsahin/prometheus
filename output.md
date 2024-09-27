@@ -4,6 +4,9 @@ Install Grafana to CRC Openshift
 # Expected Key Result
 <img width="1614" alt="image" src="https://github.com/user-attachments/assets/fe841932-6a43-4b91-9dc7-fe5a53b1f433">
 
+# Reference
+https://github.com/bitnami/charts/blob/main/bitnami/grafana/README.md
+
 # Install
 ![image](https://github.com/user-attachments/assets/db91bfa4-2f6a-4306-a909-dbbb0b56a617)
 
