@@ -21,7 +21,7 @@ securityContext:
 initContainers:
   - name: fix-permissions
     image: busybox
-    command: ['sh', '-c', 'chown -R 1001:1001 /opt/bitnami/grafana/data && chmod -R 775 /opt/bitnami/grafana/data']
+    command: ['sh', '-c', 'mkdir -p /opt/bitnami/grafana/data/plugins && chown -R 1001:1001 /opt/bitnami/grafana/data/plugins && chmod -R 775 /opt/bitnami/grafana/data/plugins']
     volumeMounts:
       - name: grafana-storage
         mountPath: /opt/bitnami/grafana/data
